@@ -1,114 +1,57 @@
 # Mystery Word
 
+## How to use
+
+With Python installed on your system,
+run this in the command line
+$ python3 mystery_word.py
+This should invoke the program and you will see the
+greeting message if it worked.
+
 ## Description
 
-Implement the game of Mystery Word.
+"Mystery Word" is a game where you guess letters in a word
+hidden from you by the computer.
+If you guess a letter that the word has, it reveals
+all of the instances of that letter.
+However, if you guess a letter that is not in the word
+the number of remaining tries is decreased by 1
+Also, to add tension, a cartoon person loses one
+body part.
 
-## Objectives
+## How to play
 
-### Learning Objectives
+After the game starts, you will select your difficulty
+level by tying a word or letter and hitting enter.
+If that input starts with an "e", then the mystery word
+will be between 4 and 6 letters long.
+If that input starts with a "n" then it will be 6 to 8
+characters long.
+If the input starts with an "h" then the word will be 8
+or more characters long.
 
-After completing this assignment, you should understand:
+After the difficulty is selected, the computer will let
+you know how many characters the word has and you can
+begin guessing letters.
 
-* All the basics of Python!
+Example, the word is "sheep"
+and you have guessed e and s
+the computer will display
 
-### Performance Objectives
+     S _ E E _
 
-After completing this assignment, you should be able to:
+Additionally, it will give the number of remaining guesses
+and some other helpful textual details.
 
-* Create an interactive program.
-* Read from a file.
-* Choose a random value.
-* Keep track of state.
-* Test your code.
+If you guess a letter which has already been guessed,
+you have to guess again (for that round) and you are
+not penalized for the wrong guess.
 
-## Details
+You have 8 tries to guess all the letters in the word.
+If you guess all the letters before the counter runs out
+you win, but if the word still contains uncovered letters
+after 8 tries, you lose.
 
-### Deliverables
-
-* A Git repo called mystery-word containing at least:
-  * a `README.md` file explaining how to run your project
-  * a `requirements.txt` file with any third-party packages needed
-  * a suite of tests for your project
-
-### Requirements  
-
-* Passing unit tests
-* No PEP8 warnings or errors
-
-## Normal Mode
-
-You will implement the game Mystery Word. In your game, you will be playing
-against the computer.
-
-The computer must select a word at random from the list of words in the file
-`/usr/share/dict/words`. This file exists on your computer already.
-
-The game must be interactive; the flow of the game should go as follows:
-
-1. Let the user choose a level of difficulty at the beginning of the program.
-Easy mode only has words of 4-6 characters; normal mode only has words of 6-8
-characters; hard mode only has words of 8+ characters.
-
-2. At the start of the game, let the user know how many letters the computer's
-word contains.
-
-3. Ask the user to supply one guess (i.e. letter) per round. This letter can be
-upper or lower case and it should not matter. If a user enters more than one
-letter, tell them the input is invalid and let them try again.
-
-4. Let the user know if their guess appears in the computer's word.
-
-5. Display the partially guessed word, as well as letters that have not been
-guessed. For example, if the word is BOMBARD and the letters guessed are a, b,
-and d, the screen should display:
-
-```
-B _ _ B A _ D
-```
-
-A user is allowed 8 guesses. Remind the user of how many guesses they have left
-after each round.
-
-*A user loses a guess only when they guess incorrectly.* If they guess a letter
-that is in the computer's word, they do not lose a guess.
-
-If the user guesses the same letter twice, do not take away a guess. Instead,
-print a message letting them know they've already guessed that letter and ask
-them to try again.
-
-The game should end when the user constructs the full word or runs out of
-guesses. If the player runs out of guesses, reveal the word to the user when
-the game ends.
-
-When a game ends, ask the user if they want to play again. The game begins
-again if they reply positively.
-
-## Hard Mode
-
-Implement the [evil version of this game](http://nifty.stanford.edu/2011/schwarz-evil-hangman/).
-Put it in a new Python program called "demon_words.py".
-
-You must write tests for new functionality you introduce.
-
-## Notes
-
-This is the first assignment where you are writing code to make tests pass.
-That makes it extra challenging.
-
-When testing, keep in mind that testing user input and output is hard. Testing
-functions that have no side-effects -- that is, they take some arguments and
-return a value without getting information from `input()` or using `random` --
-is much easier. Try to keep all your logic in _pure functions_ and then have an
-outer crust of functions that talk to the user or read from files surrounding
-your delicious pure function middle. If you are able to do this, you will not
-need to test that outer crust.
-
-## Additional Resources
-
-* [nose]https://nose.readthedocs.org/en/latest/).
-* [Working with Text Files](https://opentechschool.github.io/python-data-intro/core/text-files.html)
-
-## Credit
-
-This lab is based off a similar exercise in MIT's 6.00.1x course.
+After you win or lose you can choose to play again by
+typing "y" or leave the program by typing "n". But if you
+need to exit at some other time, hit ctl+c.

@@ -1,4 +1,5 @@
 from mystery_word import *
+import nose
 
 word_list = ["bird", "calf", "river", "stream", "kneecap",  "cookbook",
              "language", "sneaker", "algorithm", "integration", "brain"]
@@ -44,3 +45,7 @@ def test_is_word_complete():
     assert not is_word_complete(word, ["r", "e"])
     assert not is_word_complete(word, ["r", "e", "z"])
     assert is_word_complete(word, ["r", "e", "v", "i"])
+
+
+if __name__ == '__main__':
+    nose.main()

@@ -1,0 +1,10 @@
+
+This program requires python packages:
+ - node
+ - random
+
+Node must also be installed separately, command line use:
+ pip3 install nose
+
+The program assumes the existence of a dictionary located:
+/usr/share/dict/words
