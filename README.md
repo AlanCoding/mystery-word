@@ -66,3 +66,10 @@ the working dictionary is narrowed down in a way such that
 every letter reveal is truthful, but the work selection is
 adjusted on the fly so that it makes it extra difficult for
 the user.
+
+Note: As an extension of the work requirements, the
+processing of narrowing the remaining dictionary isn't
+based only on the number of words in the dictionary, but
+also the number of letters.
+
+Advanced improvements may be tried at a later time. 

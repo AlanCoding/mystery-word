@@ -2,22 +2,26 @@ from random import randrange
 
 
 def load_dict():
+    """Returns a dictionary based on Mac spellcheck dictionary"""
     with open("/usr/share/dict/words") as dictFile:
         dictString = dictFile.read()
     return dictString.split()
 
 def easy_words(word_list):
+    """Narrows dictionary to between 4 and 6 letters"""
     return [x for x in word_list if len(x)>=4 and len(x)<=6]
 def medium_words(word_list):
+    """Narrows dictionary to between 6 and 8 letters"""
     return [x for x in word_list if len(x)>=6 and len(x)<=8]
-def most_words(word_list):
-    return [x for x in word_list if len(x)>=4 and len(x)<=20]
 def hard_words(word_list):
+    """Narrows dictionary to 8 or more letters"""
     return [x for x in word_list if len(x)>=8]
 def random_word(word_list):
+    """Gives one randon word in dictionary"""
     return word_list[randrange(len(word_list))]
 
 def display_word(word, charsGuessed):
+    """Gives string to print with hidden non-guessed letters"""
     dispWord = ""
     for char in word:
         if char in charsGuessed:
@@ -28,13 +32,15 @@ def display_word(word, charsGuessed):
     return dispWord
 
 def is_word_complete(word, charsGuessed):
+    """Determines if word contains no unguessed characters"""
     for char in word:
         if char not in charsGuessed:
             return False
     return True
 
 def start_game():
-    print("\n Welcome to Hangman!")
+    """UI for the initial difficultity selection of game"""
+    print("\n Welcome to Mystery Word! Compare to name brand Hangman.")
     print("   select your difficultity level")
     print("      -[E]asy  -[N]ormal  -[H]ard  -[S]atanic")
     difficultity = input("    enter a selection:")
@@ -42,6 +48,7 @@ def start_game():
     return difficultity
 
 def state_print(wordString, ct):
+    """Gives game info update and cartoon man"""
     if (ct>1):
         print("   o    ")
     else:
@@ -68,14 +75,20 @@ def state_print(wordString, ct):
         print("        ")
 
 def letter_input(charGuesses):
+    """Gets a character guess from user"""
     c = input("Input your next letter guess:")
+    if len(c)==0:
+        c = " "
     while c[0].lower() in charGuesses:
         print(" You already guessed that!",end="")
         c = input("  make a new guess:")
+        if len(c)==0:
+            c = " "
     print("")
     return c
 
 def wrong_guess(ct):
+    """Prints message when guess is wrong"""
     discouragingWords = [
         "fear not the reaper",
         "okay maybe panic now",
@@ -93,7 +106,15 @@ def wrong_guess(ct):
         ct2 = 7
     print("   "+discouragingWords[ct2])
 
+def dictFOM(dict):
+    """Figure of merit for difficultity of a dictionary"""
+    if len(dict) == 0:
+        return 0
+    else:
+        return len(dict)*len(dict[0])
+
 def narrow_words(dict,charsGuessed):
+    """Gives subset dictionary to be more difficult"""
     dictDict = {}
     for word in dict:
         tag = display_word(word,charsGuessed)
@@ -103,12 +124,12 @@ def narrow_words(dict,charsGuessed):
             dictDict[tag] = [word]
     dictLargest = []
     for dict in dictDict:
-        if len(dictDict[dict]) > len(dictLargest):
+        if dictFOM(dictDict[dict]) > dictFOM(dictLargest):
             dictLargest = dictDict[dict]
     return dictLargest
 
 def game_block(useDict,evil):
-
+    """Exeutes game Mystery Word one time"""
     hiddenWord = random_word(useDict)
     print("The word contains "+str(len(hiddenWord))+" letters")
     charGuesses = []
@@ -166,9 +187,7 @@ if __name__ == '__main__':
             useDict = medium_words(fullDict)
         elif difficultity[0].lower() == 's':
             evil = True
-            useDict = most_words(fullDict)
-            print(" words ",len(useDict))
-            useDict = narrow_words(useDict,[])
+            useDict = narrow_words(fullDict,[])
             print(" words "+str(len(useDict))+" "+str(useDict[0]))
         else:
             print("error: difficultity not understood")
