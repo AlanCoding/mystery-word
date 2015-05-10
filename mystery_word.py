@@ -10,6 +10,8 @@ def easy_words(word_list):
     return [x for x in word_list if len(x)>=4 and len(x)<=6]
 def medium_words(word_list):
     return [x for x in word_list if len(x)>=6 and len(x)<=8]
+def most_words(word_list):
+    return [x for x in word_list if len(x)>=4 and len(x)<=20]
 def hard_words(word_list):
     return [x for x in word_list if len(x)>=8]
 def random_word(word_list):
@@ -34,12 +36,12 @@ def is_word_complete(word, charsGuessed):
 def start_game():
     print("\n Welcome to Hangman!")
     print("   select your difficultity level")
-    print("      -Easy  -Normal  -Hard")
+    print("      -[E]asy  -[N]ormal  -[H]ard  -[S]atanic")
     difficultity = input("    enter a selection:")
     print("")
     return difficultity
 
-def state_print(word, charsGuessed, ct):
+def state_print(wordString, ct):
     if (ct>1):
         print("   o    ")
     else:
@@ -57,7 +59,7 @@ def state_print(word, charsGuessed, ct):
         print("   |    ",end="")
     else:
         print("        ",end="")
-    print("Word: "+display_word(word,charsGuessed))
+    print("Word: "+wordString)
     if ct>7:
         print("   /\   ")
     elif ct>6:
@@ -73,10 +75,7 @@ def letter_input(charGuesses):
     print("")
     return c
 
-
-if __name__ == '__main__':
-    fullDict = load_dict()
-    print("Dictionary has "+str(len(fullDict))+" words\n")
+def wrong_guess(ct):
     discouragingWords = [
         "fear not the reaper",
         "okay maybe panic now",
@@ -88,42 +87,99 @@ if __name__ == '__main__':
         "keep calm and keep guessing",
         "no need to panic, you'll be ok",
     ]
+    print("Uh oh! That letter isn't in the word")
+    ct2 = ct
+    if ct >= 8:
+        ct2 = 7
+    print("   "+discouragingWords[ct2])
+
+def narrow_words(dict,charsGuessed):
+    dictDict = {}
+    for word in dict:
+        tag = display_word(word,charsGuessed)
+        if tag in dictDict:
+            dictDict[tag].append(word)
+        else:
+            dictDict[tag] = [word]
+    dictLargest = []
+    for dict in dictDict:
+        if len(dictDict[dict]) > len(dictLargest):
+            dictLargest = dictDict[dict]
+    return dictLargest
+
+def game_block(useDict,evil):
+
+    hiddenWord = random_word(useDict)
+    print("The word contains "+str(len(hiddenWord))+" letters")
+    charGuesses = []
+
+    guesses = 8
+    while True:
+        charGuess = letter_input(charGuesses)[0].lower()
+        if (len(charGuess)==0):
+            charGuess = " "
+        charGuesses.append(charGuess)
+
+        if evil:
+            useDict = narrow_words(useDict,charGuesses)
+            if len(useDict)==1:
+                evil = False
+                hasWon = is_word_complete(hiddenWord,charGuesses)
+            elif len(useDict)<1:
+                raise SystemExit(0)
+            else:
+                hasWon = False
+            hiddenWord = useDict[0]
+            print("Dictionary has "+str(len(useDict))+" words\n")
+        else:
+            hasWon = is_word_complete(hiddenWord,charGuesses)
+        wordString = display_word(hiddenWord,charGuesses)
+        state_print(wordString,guesses)
+        if hasWon:
+            print('You Won!')
+            print(' --- '+(hiddenWord+" ")*5+' --- ')
+            break
+        if charGuess not in hiddenWord:
+            guesses -= 1
+            wrong_guess(guesses)
+        elif guesses >0:
+            print("Congrats, you guessed a letter!")
+            print("  your doom is temporarly delayed")
+        else:
+            print('You Lost :(')
+            print('  the word was '+hiddenWord)
+            break
+
+if __name__ == '__main__':
+    fullDict = load_dict()
+    print("Dictionary has "+str(len(fullDict))+" words\n")
 
     while True:
 
+        evil = False
         difficultity = start_game()
         if difficultity[0].lower() == 'e':
             useDict = easy_words(fullDict)
         elif difficultity[0].lower() == 'h':
             useDict = hard_words(fullDict)
-        else:
+        elif difficultity[0].lower() == 'n':
             useDict = medium_words(fullDict)
-        hiddenWord = random_word(useDict)
-        print("The word contains "+str(len(hiddenWord))+" letters")
-        charGuesses = []
+        elif difficultity[0].lower() == 's':
+            evil = True
+            useDict = most_words(fullDict)
+            print(" words ",len(useDict))
+            useDict = narrow_words(useDict,[])
+            print(" words "+str(len(useDict))+" "+str(useDict[0]))
+        else:
+            print("error: difficultity not understood")
+            break
 
-        guesses = 8
-        while guesses > 0:
-            charGuess = letter_input(charGuesses)[0].lower()
-            charGuesses.append(charGuess)
-            state_print(hiddenWord,charGuesses,guesses)
-            if is_word_complete(hiddenWord,charGuesses):
-                print('You Won!')
-                print(' --- '+hiddenWord*5+' --- ')
-                break
-            elif charGuess not in hiddenWord:
-                guesses -= 1
-                print("Uh oh! That letter isn't in the word")
-                print("   "+discouragingWords[guesses])
-            elif guesses >0:
-                print("Congrats, you guessed a letter!")
-                print("  your doom is temporarly delayed")
-            else:
-                print('You Lost :(')
-                print('  the word was '+hiddenWord)
+        game_block(useDict,evil)
 
         print("")
         playAgain = input("Do you want to play again? (y/n)")
+        if len(playAgain)==0:
+            playAgain = " "
         if playAgain[0].lower() == 'y':
             continue
         else:

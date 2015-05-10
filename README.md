@@ -4,7 +4,9 @@
 
 With Python installed on your system,
 run this in the command line
-$ python3 mystery_word.py
+
+     $ python3 mystery_word.py
+
 This should invoke the program and you will see the
 greeting message if it worked.
 
@@ -55,3 +57,12 @@ after 8 tries, you lose.
 After you win or lose you can choose to play again by
 typing "y" or leave the program by typing "n". But if you
 need to exit at some other time, hit ctl+c.
+
+###Hard Mode
+
+The "Satanic" mode adheres to a method which doesn't hold
+a specific word in memory as guesses are made. Instead,
+the working dictionary is narrowed down in a way such that
+every letter reveal is truthful, but the work selection is
+adjusted on the fly so that it makes it extra difficult for
+the user.
