@@ -70,6 +70,6 @@ the user.
 Note: As an extension of the work requirements, the
 processing of narrowing the remaining dictionary isn't
 based only on the number of words in the dictionary, but
-also the number of letters.
+also the remaining number of unguessed letters.
 
-Advanced improvements may be tried at a later time. 
+Advanced improvements may be tried at a later time.

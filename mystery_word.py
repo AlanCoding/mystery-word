@@ -106,12 +106,20 @@ def wrong_guess(ct):
         ct2 = 7
     print("   "+discouragingWords[ct2])
 
-def dictFOM(dict):
+def dictFOM(dict,charGuesses):
     """Figure of merit for difficultity of a dictionary"""
     if len(dict) == 0:
         return 0
     else:
-        return len(dict)*len(dict[0])
+        cTotal = 0
+        for i in range(10):
+            word = random_word(dict)
+            unknownChars = ""
+            for char in word:
+                if char not in unknownChars and char not in charGuesses:
+                    unknownChars += char
+            cTotal += len(unknownChars) / 10
+        return len(dict)*cTotal
 
 def narrow_words(dict,charsGuessed):
     """Gives subset dictionary to be more difficult"""
@@ -124,7 +132,7 @@ def narrow_words(dict,charsGuessed):
             dictDict[tag] = [word]
     dictLargest = []
     for dict in dictDict:
-        if dictFOM(dictDict[dict]) > dictFOM(dictLargest):
+        if dictFOM(dictDict[dict],charsGuessed) > dictFOM(dictLargest,charsGuessed):
             dictLargest = dictDict[dict]
     return dictLargest
 
@@ -161,15 +169,15 @@ def game_block(useDict,evil):
             print(' --- '+(hiddenWord+" ")*5+' --- ')
             break
         if charGuess not in hiddenWord:
-            guesses -= 1
             wrong_guess(guesses)
-        elif guesses >0:
+            guesses -= 1
+            if guesses < 0:
+                print('You Lost :(')
+                print('  the word was '+hiddenWord)
+                break
+        else:
             print("Congrats, you guessed a letter!")
             print("  your doom is temporarly delayed")
-        else:
-            print('You Lost :(')
-            print('  the word was '+hiddenWord)
-            break
 
 if __name__ == '__main__':
     fullDict = load_dict()
